@@ -1,0 +1,26 @@
+https-portal:
+  container_name: https-portal
+  image: steveltn/https-portal
+  ports:
+    - '80:80'
+    - '443:443'
+  restart: always
+  environment:
+    STAGE: 'production'
+    NUMBITS: '4096'
+#      FORCE_RENEW: 'true'
+    WORKER_PROCESSES: '4'
+    WORKER_CONNECTIONS: '1024'
+    KEEPALIVE_TIMEOUT: '65'
+    GZIP: 'on'
+    SERVER_NAMES_HASH_BUCKET_SIZE: '64'
+    PROXY_CONNECT_TIMEOUT: '900'
+    PROXY_SEND_TIMEOUT: '900'
+    PROXY_READ_TIMEOUT: '900'
+    CLIENT_MAX_BODY_SIZE: 30M
+    DOMAINS: >-
+        appv2.inspiremail.io -> http://172.17.0.4,
+  volumes:
+    - ./conf.d:/etc/nginx/conf.d/:rw
+    - ./ssl_certs:/var/lib/https-portal:rw
+    - /var/run/docker.sock:/var/run/docker.sock:ro

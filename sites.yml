@@ -18,7 +18,7 @@ wp-SITE1:
     WORDPRESS_DB_PASSWORD: 'Ele10Kha6172'
     VIRTUAL_HOST: directmailling.com
   volumes:
-    - ./html:/var/www/html:rw
+    - ./app:/var/www/html:rw
 #   - ./php:/usr/local/etc/php:rw
 
 #wp-SITE2:

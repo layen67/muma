@@ -19,7 +19,7 @@ https-portal:
     PROXY_READ_TIMEOUT: '900'
     CLIENT_MAX_BODY_SIZE: 30M
     DOMAINS: >-
-        appv2.inspiremail.io -> http://172.17.0.4,
+        directmailling.com -> http://172.17.0.4,
   volumes:
     - ./conf.d:/etc/nginx/conf.d/:rw
     - ./ssl_certs:/var/lib/https-portal:rw

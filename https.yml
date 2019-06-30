@@ -6,7 +6,7 @@ https-portal:
     - '443:443'
   restart: always
   environment:
-    STAGE: 'production'
+    STAGE: 'local'
     NUMBITS: '4096'
 #      FORCE_RENEW: 'true'
     WORKER_PROCESSES: '4'

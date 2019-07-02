@@ -1,0 +1,25 @@
+db:
+  container_name: mysql57
+  image: mysql:5.7
+  environment:
+    MYSQL_ROOT_PASSWORD: my_secret_pw_shh
+    MYSQL_DATABASE: test_db
+    MYSQL_USER: devuser
+    MYSQL_PASSWORD: devpass
+  ports:
+    - "9906:3306"
+
+wp-SITE1:
+  container_name: wp-SITE1
+  image: khalid_ioncube:latest
+  restart: always
+  links:
+    - db:db
+  environment:
+    WORDPRESS_DB_NAME: wpSITE1db
+    WORDPRESS_DB_PASSWORD: 'Ele10Kha6172'
+    VIRTUAL_HOST: directmailling.com
+  volumes:
+    - ./www:/var/www/html:rw
+#    - ./nginx.conf:/etc/nginx/nginx.conf:rw
+#    - ./php.ini:/usr/local/etc/php/conf.d/90-custom.ini

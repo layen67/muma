@@ -1,13 +1,13 @@
 FROM debian:8
 
 RUN apt-get update
-RUN apt-get install -y wget curl apache2 php5 php5-imagick php5-mcrypt php5-curl php5-xsl php5-intl php5-gd php5-mysql php5-xdebug unzip
+RUN apt-get install -y wget curl apache2 php5 php5-imagick php5-mcrypt php5-curl php5-xsl php5-intl php5-gd php5-mysql php5-xdebug php5-gd php5-intl php-pear php5-imap php5-memcache php5-ming php5-ps php5-pspell php5-recode php5-snmp php5-tidy php5-xmlrpc php5-xsl unzip
 RUN service apache2 restart
 
 #configure php
 RUN ["bin/bash", "-c", "sed -i 's/max_execution_time\\s*=.*/max_execution_time=180/g' /etc/php5/apache2/php.ini"]
-RUN ["bin/bash", "-c", "sed -i 's/upload_max_filesize\\s*=.*/upload_max_filesize=16M/g' /etc/php5/apache2/php.ini"]
-RUN ["bin/bash", "-c", "sed -i 's/memory_limit\\s*=.*/memory_limit=512M/g' /etc/php5/apache2/php.ini"]
+RUN ["bin/bash", "-c", "sed -i 's/upload_max_filesize\\s*=.*/upload_max_filesize=200M/g' /etc/php5/apache2/php.ini"]
+RUN ["bin/bash", "-c", "sed -i 's/memory_limit\\s*=.*/memory_limit=1024M/g' /etc/php5/apache2/php.ini"]
 
 RUN echo always_populate_raw_post_data=-1 >> /etc/php5/apache2/php.ini
 

@@ -1,7 +1,7 @@
 FROM debian:8
 
 RUN apt-get update
-RUN apt-get install -y wget curl apache2 php5 php5-imap php5-imagick php5-mcrypt php5-curl php5-xsl php5-intl php5-gd php5-mysql php5-xdebug unzip
+RUN apt-get install -y wget nano curl apache2 php5 php5-imap php5-imagick php5-mcrypt php5-curl php5-xsl php5-intl php5-gd php5-mysql php5-xdebug unzip
 RUN service apache2 restart
 
 #configure php

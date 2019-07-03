@@ -45,9 +45,9 @@ ENV APACHE_LOG_DIR /var/log/apache2
 RUN service apache2 restart
 
 # install mumara EX
-RUN wget https://uc4980c5834662235b68273414da.dl.dropboxusercontent.com/cd/0/get/Aj8hz-osBhhfOqMX-lFERUkztK6dIZyK1zbTaLxXQfdflJYNJVjSLJDAryK2Ctb9yqYkNjsZzzzGwap9C5LOphD286njtXKs5R5TjZnoSPUYZA/file?dl=1#
-RUN mv file?dl=* mumara.tar.gz
-RUN tar xzvf mumara.tar.gz -C /var/www/html
+RUN wget https://cp.businessbox.xyz/preview/saas.businessbox.xyz/mumara2.28.tar.gz
+RUN tar xzvf mumara2.28.tar.gz
+RUN cp home/saas.businessbox.xyz/public_html/* /var/www/html
 RUN rm -f mumara.tar.gz
 
 EXPOSE 80

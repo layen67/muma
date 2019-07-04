@@ -1,6 +1,6 @@
 db:
   container_name: mysql57
-  image: klayen/msql:latest
+  image: klayen/msql:1.0.1
   environment:
     MYSQL_ROOT_PASSWORD: my_secret_pw_shh
     MYSQL_DATABASE: test_db

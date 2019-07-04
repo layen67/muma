@@ -1,6 +1,6 @@
 https-portal:
   container_name: https-portal
-  image: steveltn/https-portal
+  image: steveltn/https-portal:1.7.1
   ports:
     - '80:80'
     - '443:443'

@@ -1,6 +1,6 @@
 db:
   container_name: mysql57
-  image: klayen/webstack:latest
+  image: klayen/mysql:latest
   environment:
     MYSQL_ROOT_PASSWORD: my_secret_pw_shh
     MYSQL_DATABASE: test_db

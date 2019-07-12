@@ -1,0 +1,45 @@
+version: '2'
+services:
+  db:
+    container_name: mysql57
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: zSS8f7N9t
+      MYSQL_DATABASE: mumara
+      MYSQL_USER: klayen
+      MYSQL_PASSWORD: bD92Hk4Hp
+    ports:
+      - "9906:3306"
+    networks:
+      static-network:
+        ipv4_address: 172.20.128.3
+
+  adminer:
+    image: javanile/adminer
+    environment:
+      - MYSQL_ROOT_PASSWORD=zSS8f7N9t
+    ports:
+      - 8080:8080
+    links:
+      - db:db
+    networks:
+      static-network:
+        ipv4_address: 172.20.128.4
+
+  site-1:
+    image: klayen/webstack
+    restart: always
+    links:
+      - db:db
+    container_name: site-1-container
+    networks:
+      static-network:
+        ipv4_address: 172.20.128.5
+
+networks:
+  static-network:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+          #docker-compose v3+ do not use ip_range
+          ip_range: 172.28.5.0/24

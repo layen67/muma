@@ -1,0 +1,58 @@
+version: '2'
+
+services:
+  mysql:
+    image: mariadb:10.4
+    environment:
+    - MYSQL_ROOT_PASSWORD=mailtrain
+    - MYSQL_DATABASE=mailtrain
+    - MYSQL_USER=mailtrain
+    - MYSQL_PASSWORD=mailtrain
+    volumes:
+    - mysql-data:/var/lib/mysql
+    networks:
+      static-network:
+        ipv4_address: 172.20.128.2    
+
+  redis:
+    image: redis:5
+    volumes:
+    - redis-data:/data
+     networks:
+      static-network:
+        ipv4_address: 172.20.128.3   
+
+  mongo:
+    image: mongo:4-xenial
+    volumes:
+    - mongo-data:/data/db
+    networks:
+      static-network:
+        ipv4_address: 172.20.128.4    
+
+  mailtrain:
+    image: mailtrain/mailtrain:latest
+    command: ${MAILTRAIN_SETTINGS}
+    ports:
+    - "3000:3000"
+    - "3003:3003"
+    - "3004:3004"
+    volumes:
+    - mailtrain-files:/app/server/files
+    networks:
+      static-network:
+        ipv4_address: 172.20.128.5        
+
+volumes:
+  mysql-data:
+  redis-data:
+  mongo-data:
+  mailtrain-files:
+
+networks:
+  static-network:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+          #docker-compose v3+ do not use ip_range
+          ip_range: 172.28.5.0/24

@@ -1,6 +1,40 @@
 version: '2'
-
 services:
+  https-portal:
+    container_name: https-portal
+    image: steveltn/https-portal:latest
+    ports:
+      - '80:80'
+      - '443:443'
+    networks:
+      static-network:
+        ipv4_address: 172.20.128.2
+    restart: always
+    environment:
+      STAGE: 'local'
+      NUMBITS: '4096'
+#        FORCE_RENEW: 'true'
+      WORKER_PROCESSES: '4'
+      WORKER_CONNECTIONS: '1024'
+      KEEPALIVE_TIMEOUT: '65'
+      GZIP: 'on'
+      SERVER_NAMES_HASH_BUCKET_SIZE: '64'
+      PROXY_CONNECT_TIMEOUT: '900'
+      PROXY_SEND_TIMEOUT: '900'
+      PROXY_READ_TIMEOUT: '900'
+      CLIENT_MAX_BODY_SIZE: 30M
+      DOMAINS: >-
+          mailtrain.directmailling.com -> http://172.20.128.6:3000,
+          sbox.directmailling.com -> http://172.20.128.6:3003,
+          lists.directmailling.com -> http://172.20.128.6:3004
+    volumes:
+      - ./conf.d:/etc/nginx/conf.d/:rw
+      - ./ssl_certs:/var/lib/https-portal:rw
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      static-network:
+        ipv4_address: 172.20.128.2      
+
   mysql:
     image: mariadb:10.4
     environment:
@@ -12,7 +46,7 @@ services:
     - mysql-data:/var/lib/mysql
     networks:
       static-network:
-        ipv4_address: 172.20.128.2    
+        ipv4_address: 172.20.128.3    
 
   redis:
     image: redis:5
@@ -20,7 +54,7 @@ services:
     - redis-data:/data
      networks:
       static-network:
-        ipv4_address: 172.20.128.3   
+        ipv4_address: 172.20.128.4   
 
   mongo:
     image: mongo:4-xenial
@@ -28,7 +62,7 @@ services:
     - mongo-data:/data/db
     networks:
       static-network:
-        ipv4_address: 172.20.128.4    
+        ipv4_address: 172.20.128.5    
 
   mailtrain:
     image: mailtrain/mailtrain:latest
@@ -41,7 +75,7 @@ services:
     - mailtrain-files:/app/server/files
     networks:
       static-network:
-        ipv4_address: 172.20.128.5        
+        ipv4_address: 172.20.128.6        
 
 volumes:
   mysql-data:

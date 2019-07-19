@@ -52,7 +52,7 @@ services:
     image: redis:5
     volumes:
     - redis-data:/data
-     networks:
+    networks:
       static-network:
         ipv4_address: 172.20.128.4   
 

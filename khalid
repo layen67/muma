@@ -1,0 +1,73 @@
+version: '2'
+services:
+  # MariaDBの設定
+  maria:
+    # Dockerfileの場所
+    build: ./db
+    # コンテナ名の定義
+    container_name: maria
+    # 環境変数の設定 docker runの-eオプションに対応
+    environment:
+      # MariaDBのrootユーザーのパスワード
+      MYSQL_ROOT_PASSWORD: hogehoge
+    # データ保存場所指定
+    volumes:
+      # データベースの永続化を定義
+      - ./db/vol:/var/lib/mysql
+      # データベースの初期化スクリプト置き場
+      - ./db/init.s:/docker-entrypoint-initdb.d
+      # データベースの初期データ置き場
+      - ./db/init.d:/var/lib/ram
+    # 所属するネットワークとIPを指定
+    networks:
+      br0:
+        ipv4_address: 192.168.200.2
+  # httpdの設定
+  httpd:
+    # Dockerfuleの場所
+    build: ./web
+    # コンテナ名の定義
+    container_name: httpd
+    # データの保存場所
+    volumes:
+      # DocumentRootのホスト側とのリンク
+      - ./web/html:/var/www/html
+    # 直前の起動コンテナの設定
+    depends_on:
+      - maria
+    # 所属するネットワークとIPを指定
+    networks:
+      br0:
+        ipv4_address: 192.168.200.3
+  #リバースプロキシの設定
+  https-portal:
+    # イメージの定義
+    image: steveltn/https-portal:1
+    # ポートフォワーディング
+    ports:
+      - '80:80'
+      - '443:443'
+    # NATの設定
+    extra_hosts:
+      - '"DDNSで取得したDNS":127.0.0.1'
+    # コンテナ同士の接続
+    links:
+      - httpd
+    # 環境変数の設定
+    environment:
+      # 本番用
+      DOMAINS: '"DDNSで取得したDNS" -> http://httpd'
+      STAGE: 'production'
+    # 所属するネットワークとIPを指定
+    networks:
+      br0:
+        ipv4_address: 192.168.200.4
+# 新規ブリッチを定義
+networks:
+  br0:
+    driver: bridge
+    ipam:
+      config:
+      - subnet: 192.168.200.0/24
+        gateway: 192.168.200.1
+

@@ -3,7 +3,7 @@ services:
   # MariaDBの設定
   maria:
     # Dockerfileの場所
-    build: ./db
+    image: mysql:5.7
     # コンテナ名の定義
     container_name: maria
     # 環境変数の設定 docker runの-eオプションに対応
@@ -25,7 +25,7 @@ services:
   # httpdの設定
   httpd:
     # Dockerfuleの場所
-    build: ./web
+    image: klayen/muma:1.4
     # コンテナ名の定義
     container_name: httpd
     # データの保存場所
@@ -42,7 +42,7 @@ services:
   #リバースプロキシの設定
   https-portal:
     # イメージの定義
-    image: steveltn/https-portal:1
+    image: steveltn/https-portal:latest
     # ポートフォワーディング
     ports:
       - '80:80'
@@ -55,10 +55,26 @@ services:
       - httpd
     # 環境変数の設定
     environment:
-      # 本番用
-      DOMAINS: '"DDNSで取得したDNS" -> http://httpd'
-      STAGE: 'production'
-    # 所属するネットワークとIPを指定
+#      STAGE: 'production'
+      NUMBITS: '4096'
+#        FORCE_RENEW: 'true'
+      WORKER_PROCESSES: '4'
+      WORKER_CONNECTIONS: '1024'
+      KEEPALIVE_TIMEOUT: '65'
+      GZIP: 'on'
+      SERVER_NAMES_HASH_BUCKET_SIZE: '64'
+      PROXY_CONNECT_TIMEOUT: '900'
+      PROXY_SEND_TIMEOUT: '900'
+      PROXY_READ_TIMEOUT: '900'
+      CLIENT_MAX_BODY_SIZE: 30M
+      DOMAINS: >-
+          mailtrain.directmailling.com -> http://172.20.128.6:3000,
+          sbox.directmailling.com -> http://172.20.128.6:3003,
+          lists.directmailling.com -> http://172.20.128.6:3004
+    volumes:
+      - ./conf.d:/etc/nginx/conf.d/:rw
+      - ./ssl_certs:/var/lib/https-portal:rw
+      - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
       br0:
         ipv4_address: 192.168.200.4

@@ -68,9 +68,9 @@ services:
       PROXY_READ_TIMEOUT: '900'
       CLIENT_MAX_BODY_SIZE: 30M
       DOMAINS: >-
-          mailtrain.directmailling.com -> http://172.20.128.6:3000,
-          sbox.directmailling.com -> http://172.20.128.6:3003,
-          lists.directmailling.com -> http://172.20.128.6:3004
+          mailtrain.directmailling.com -> http://192.168.200.3,
+          sbox.directmailling.com -> http://192.168.200.3,
+          lists.directmailling.com -> http://192.168.200.3
     volumes:
       - ./conf.d:/etc/nginx/conf.d/:rw
       - ./ssl_certs:/var/lib/https-portal:rw
